@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require './lib/birthday'
 
 #set :session_secret, 'a birthday secret'
 
@@ -9,11 +10,9 @@ class BirthdayApp < Sinatra::Base
 
   post '/result' do
     @name = params[:name]
-    @day = params[:day]
-    @month = params[:select_month]
-    t = Time.now
-  
-    if t.day.to_s == @day && t.strftime("%B").downcase == @month
+    @birthday = Birthday.new(params[:day], params[:select_month])
+    
+    if @birthday.today?
       @result_text = "Happy Birthday #{@name}!"
     else
       @result_text = "Your birthday will be in X days, #{@name}."
